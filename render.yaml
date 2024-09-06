@@ -21,8 +21,8 @@ services:
       - key: WEB_CONCURRENCY
         value: 4
       - key: DJANGO_SUPERUSER_USERNAME
-        value: "joonas"
+        value: "joonas1"
       - key: DJANGO_SUPERUSER_PASSWORD
-        value: "joonas"
+        value: "joonas1"
       - key: DJANGO_SUPERUSER_EMAIL
         value: "super@user.fi"
