@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-fqz^un)a&(k3jyh#yigzz7&a0fzcw(%7a6qeto9rbn4uiau706'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -85,7 +85,7 @@ DATABASES = {
     }
 }
 '''
-
+'''
 # Local PostgreSQL database
 DATABASES = {
     'default': {
@@ -97,8 +97,8 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 '''
+
 # Replace the SQLite DATABASES configuration with PostgreSQL:
 DATABASES = {
     'default': dj_database_url.config(
@@ -107,7 +107,7 @@ DATABASES = {
         conn_max_age=600
     )
 }
-'''
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
