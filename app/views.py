@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Supplier, Product
+from .models import Supplier, Product, Car, Customer
 from django.contrib.auth import authenticate, login, logout
 
 '''# Landing afrer login
@@ -123,3 +123,109 @@ def searchsuppliers(request):
     filtered = Supplier.objects.filter(companyname__contains = search)
     context = {'suppliers': filtered}
     return render (request,"supplierlist.html",context)
+
+# Car Views
+def carlistview(request):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        carlist = Car.objects.all()
+        supplierlist = Supplier.objects.all()
+        context = {'cars': carlist, 'suppliers': supplierlist}
+        return render (request,"carlist.html",context)
+
+
+def add_car(request):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        a = request.POST['model']
+        b = request.POST['license_number']
+        c = request.POST['supplier']
+        
+        Car(model=a, license_number=b, supplier=Supplier.objects.get(id=c)).save()
+        return redirect(request.META['HTTP_REFERER'])
+    
+def cars_by_supplier(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        supplier = Supplier.objects.get(id=id)
+        cars = Car.objects.filter(supplier=supplier)
+        supplierlist = Supplier.objects.all()
+        context = {'cars': cars, 'suppliers': supplierlist, 'selected_supplier': supplier}
+        return render(request, 'carlist.html', context)
+    
+def edit_car_get(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        car = Car.objects.get(id=id)
+        supplierlist = Supplier.objects.all()
+        context = {'car': car, 'suppliers': supplierlist}
+        return render(request, "edit_car.html", context)
+
+def edit_car_post(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        car = Car.objects.get(id=id)
+        car.model = request.POST['model']
+        car.license_number = request.POST['license_number']
+        car.supplier = Supplier.objects.get(id=request.POST['supplier'])
+        car.save()
+        return redirect(carlistview)
+
+def confirm_delete_car(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        car = Car.objects.get(id=id)
+        context = {'car': car}
+        return render(request, "confirmdelcar.html", context)
+
+def delete_car(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        Car.objects.get(id=id).delete()
+        return redirect(carlistview)
+    
+# Customer Views
+
+def customerlistview(request):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        customerlist = Customer.objects.all()
+        context = {'customers': customerlist}
+        return render(request, "customerlist.html", context)
+
+def add_customer(request):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        if request.method == 'POST':
+            a = request.POST['name']
+            b = request.POST['email']
+            c = request.POST['phone']
+            d = request.POST['address']
+            Customer(name=a, email=b, phone=c, address=d).save()
+            return redirect('customer_list')
+        else:
+            return render(request, 'customerlist.html')
+
+def confirm_delete_customer(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        customer = Customer.objects.get(id=id)
+        context = {'customer': customer}
+        return render(request, "confirmdelcustomer.html", context)
+
+def delete_customer(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        Customer.objects.get(id=id).delete()
+        return redirect(customerlistview)

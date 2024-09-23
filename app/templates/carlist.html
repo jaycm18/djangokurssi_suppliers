@@ -1,0 +1,73 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<br />
+<!-- Lisäyslomakkeen paikka -->
+<div id="add-div"></div>
+<br />
+
+<h1>Cars{% if selected_supplier %} by {{ selected_supplier.name }}{% endif %}</h1>
+
+<a onclick="showaddform()" class="btn btn-primary">Add new car</a>
+
+{% for car in cars %}
+
+<div class="card" style="width: 50rem;">
+    <div class="card-body">
+        <h3 class="card-title">{{ car.model }} </h3>
+        <h5 class="card-text">Supplier: {{ car.supplier.companyname }}</h5>
+        <p class="card-text">License Number: {{ car.license_number }}</p>
+        <a href="/edit-car-get/{{ car.id }}/" class="btn btn-primary">Edit</a>
+        <a href="/confirm-delete-car/{{ car.id }}/" class="btn btn-danger">Delete</a>
+        <a href="/cars-by-supplier/{{ car.supplier.id }}/" class="btn btn-secondary">{{ car.supplier.companyname }}'s all Cars</a>
+    </div>
+</div>
+
+{% empty %}
+
+<div class="card" style="width: 50rem;">
+    <div class="card-body">
+        <p class="card-text">No cars found{% if selected_supplier %} for {{ selected_supplier.name }}{% endif %}.</p>
+    </div>
+</div>
+
+{% endfor %}
+
+<script>
+
+    let y = `
+    <h2 style="color: darkorange;">Please fill in form</h2>
+    
+    <div class="card" style="width: 20rem;">
+        <div class="card-body">
+            <form method="post" action="/add-car/">
+                {% csrf_token %}
+                <input class="card-text" type="text" placeholder="Car Model" name="model">
+                <input class="card-text" type="text" placeholder="License Number" name="license_number">
+                <br />
+                <label for="supplier">Supplier</label>
+                <select id="supplier" name="supplier">
+                {% for s in suppliers %}
+                  <option value="{{ s.id }}">{{ s.companyname }}</option>
+                  {% endfor %}S
+                </select>
+
+                <br/>
+                <input type="submit" value="Confirm" class="btn btn-success btn-sm">
+                <input type="button" id="hide-btn" class="btn btn-secondary btn-sm" onclick="hideaddform()" value="Cancel">
+            </form>
+        </div>
+    </div>`
+
+    function showaddform() {
+        document.getElementById("add-div").innerHTML = y
+    }
+
+    function hideaddform() {
+        document.getElementById("add-div").innerHTML = ""
+    }
+
+</script>
+
+{% endblock %}

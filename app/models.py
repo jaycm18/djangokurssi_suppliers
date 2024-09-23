@@ -23,3 +23,20 @@ class Product(models.Model):
      # mutta se ei ole välttämätöntä alussa
     def __str__(self):
         return f"{self.productname} produced by {self.supplier.companyname}"
+    
+class Car(models.Model):
+    model = models.CharField(max_length=100)
+    license_number = models.CharField(max_length=15)
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.model} with license number {self.license_number} from {self.supplier.companyname}"
+    
+class Customer(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=20)
+    address = models.TextField()
+
+    def __str__(self):
+        return self.name

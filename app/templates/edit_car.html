@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<h1>Edit Car</h1>
+
+<form method="post" action="{% url 'edit_car_post' car.id %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="model">Car Model</label>
+        <input type="text" class="form-control" id="model" name="model" value="{{ car.model }}" required>
+    </div>
+    <div class="form-group">
+        <label for="license_number">License Number</label>
+        <input type="text" class="form-control" id="license_number" name="license_number" value="{{ car.license_number }}" required>
+    </div>
+    <div class="form-group">
+        <label for="supplier">Supplier</label>
+        <select class="form-control" id="supplier" name="supplier" required>
+            {% for supplier in suppliers %}
+                <option value="{{ supplier.id }}" {% if supplier.id == car.supplier.id %}selected{% endif %}>{{ supplier.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{% url 'car_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
