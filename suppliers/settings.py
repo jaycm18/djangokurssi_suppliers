@@ -85,7 +85,7 @@ DATABASES = {
     }
 }
 '''
-
+'''
 # Local PostgreSQL database
 DATABASES = {
     'default': {
@@ -97,8 +97,8 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 '''
+
 # Replace the SQLite DATABASES configuration with PostgreSQL:
 DATABASES = {
     'default': dj_database_url.config(
@@ -107,7 +107,7 @@ DATABASES = {
         conn_max_age=600
     )
 }
-'''
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
